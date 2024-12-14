@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "api-gateway"
+		},
+		{
+			"path": "sample-analytics"
+		},
+		{
+			"path": "sample-communication"
+		}
+	],
+	"settings": {}
+}

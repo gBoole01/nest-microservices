@@ -7,17 +7,42 @@ import { AppService } from './app.service';
   imports: [
     ClientsModule.register([
       {
-        name: 'COMMUNICATION',
-        transport: Transport.TCP,
+        name: 'COMMUNICATION_SERVICE',
+        transport: Transport.KAFKA,
         options: {
-          port: 3000,
+          client: {
+            clientId: 'communication',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'communication-consumer',
+          },
         },
       },
       {
-        name: 'ANALYTICS',
-        transport: Transport.TCP,
+        name: 'ANALYTICS_SERVICE',
+        transport: Transport.KAFKA,
         options: {
-          port: 3001,
+          client: {
+            clientId: 'analytics',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'analytics-consumer',
+          },
+        },
+      },
+      {
+        name: 'AUTH_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'auth',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'auth-consumer',
+          },
         },
       },
     ]),

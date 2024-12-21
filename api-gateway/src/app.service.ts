@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientKafka } from '@nestjs/microservices';
 import { CreateUserRequestDto } from './create-user-request.dto';
 import { CreateUserEvent } from './create-user.event';
 
@@ -8,27 +8,20 @@ export class AppService {
   private readonly users: any[] = [];
 
   constructor(
-    @Inject('COMMUNICATION') private readonly communicationClient: ClientProxy,
-    @Inject('ANALYTICS') private readonly analyticsClient: ClientProxy,
+    @Inject('COMMUNICATION_SERVICE')
+    private readonly communicationClient: ClientKafka,
+    @Inject('ANALYTICS_SERVICE') private readonly analyticsClient: ClientKafka,
   ) {}
 
-  getHello(): string {
-    return 'Hello World!';
+  createUser({ email, password }: CreateUserRequestDto) {
+    this.users.push({ email, password });
+    this.communicationClient.emit('user_created', new CreateUserEvent(email));
+    this.analyticsClient.emit('user_created', new CreateUserEvent(email));
+
+    console.log('createUser - COMMUNICATION', email);
   }
 
-  createUser(createUserRequestDto: CreateUserRequestDto) {
-    this.users.push(createUserRequestDto);
-    this.communicationClient.emit(
-      'user_created',
-      new CreateUserEvent(createUserRequestDto.email),
-    );
-    this.analyticsClient.emit(
-      'user_created',
-      new CreateUserEvent(createUserRequestDto.email),
-    );
-  }
-
-  getAnalytics() {
-    return this.analyticsClient.send({ cmd: 'get_analytics' }, {});
-  }
+  // getAnalytics() {
+  //   return this.analyticsClient.send({ cmd: 'get_analytics' }, {});
+  // }
 }

@@ -4,10 +4,10 @@
 			"path": "api-gateway"
 		},
 		{
-			"path": "sample-analytics"
+			"path": "sample-communication"
 		},
 		{
-			"path": "sample-communication"
+			"path": "sample-auth"
 		}
 	],
 	"settings": {}
